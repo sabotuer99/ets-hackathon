@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @item.description %>
+</p>
+
+<p>
+  <strong>Agency:</strong>
+  <%= @item.agency_id %>
+</p>
+
+<p>
+  <strong>Street:</strong>
+  <%= @item.street %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @item.city_id %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @item.state_id %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @item.zip %>
+</p>
+
+<p>
+  <strong>Loc lat:</strong>
+  <%= @item.loc_lat %>
+</p>
+
+<p>
+  <strong>Loc long:</strong>
+  <%= @item.loc_long %>
+</p>
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>

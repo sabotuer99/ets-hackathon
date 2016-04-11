@@ -12,4 +12,11 @@
  *
  *= require_tree .
  *= require_self
+
  */
+ 
+a.bigger, a.bigger:visited {
+    font-size: 3em;
+    margin: 10px;
+    color: white;
+}

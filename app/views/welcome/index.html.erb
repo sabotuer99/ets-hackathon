@@ -1,0 +1,27 @@
+<div>
+
+   <div class="container-flud">
+      <div class="panel panel-default row">
+         <a class="bigger glyphicon glyphicon-globe btn btn-success" data-toggle="tooltip" title="Map of asset locations." href="/map"></a>
+         <div class="panel-body" style="display:inline-block;width:70%">View all assets on a Google map.</div>
+      </div>
+      <div class="panel panel-default row">
+         <a class="bigger glyphicon glyphicon-qrcode btn btn-warning " data-toggle="tooltip" title="Generate QR code labels." href="/qr"></a>
+         <div class="panel-body" style="display:inline-block;width:70%">Generate QR code labels to stick on inventory items.</div>
+      </div>
+      <div class="panel panel-default row">
+         <a class="bigger glyphicon glyphicon-stats btn btn-danger" data-toggle="tooltip" title="Create inventory reports." href="/reports"></a>
+         <div class="panel-body" style="display:inline-block;width:70%">Generate asset reports.</div>
+      </div>
+      <div class="panel panel-default row">
+         <a class="bigger glyphicon glyphicon-search btn btn-primary" data-toggle="tooltip" title="Search inventory." href="/items"></a>
+         <div class="panel-body" style="display:inline-block;width:70%">Search asset database.</div>
+      </div>
+   </div>
+
+</div>
+<script>
+   $(document).ready(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+   });
+</script>
