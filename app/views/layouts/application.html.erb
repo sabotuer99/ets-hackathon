@@ -5,91 +5,98 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-
-
   <title>
     <%= content_for?(:title) ? yield(:title) : "Inventory Management" %>
   </title>
-    <%= stylesheet_link_tag "application" %>
+  <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag "application" %>
-    <%= csrf_meta_tags %>
-    
-    <!-- bootstrap -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      <%= csrf_meta_tags %>
+
+        <!-- bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+        <!-- datatables  -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,af-2.1.1,b-1.1.2,b-colvis-1.1.2,b-flash-1.1.2,b-html5-1.1.2,b-print-1.1.2,cr-1.3.1,fc-3.2.1,fh-3.1.1,kt-2.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.css"
+        />
+        <script type="text/javascript" src="https://cdn.datatables.net/t/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.11,af-2.1.1,b-1.1.2,b-colvis-1.1.2,b-flash-1.1.2,b-html5-1.1.2,b-print-1.1.2,cr-1.3.1,fc-3.2.1,fh-3.1.1,kt-2.1.1,r-2.0.2,rr-1.1.1,sc-1.4.1,se-1.1.2/datatables.min.js"></script>
+
 </head>
 
 <body>
 
-<nav role="navigation" class="navbar navbar-inverse navbar-static-top">
-  <div class="container-fluid">
+  <nav role="navigation" class="navbar navbar-inverse navbar-static-top">
+    <div class="container-fluid">
 
-    <!-- Title -->
-    <div class="navbar-header pull-left">
-      <a href="/" class="navbar-brand">Inventory Management</a>
-    </div>
+      <div class="row">
+        <!-- Title -->
+        <div class="navbar-header pull-left" style="margin-left: 0px;width:50%">
+          <a href="/" class="navbar-brand" style="margin-left: 0px;">Inventory Management</a>
+        </div>
 
-    <!-- 'Sticky' (non-collapsing) right-side menu item(s) -->
-    <div class="navbar-header navbar-right">
-      <ul class="nav navbar-nav" style="margin-right: 0px">
-        <!-- This works well for static text, like a username -->
-        <li>
-          <% if current_user %>
-            <!-- Add any additional bootstrap header items.  This is a drop-down from an icon -->
-            <li class="dropdown pull-right">
-              <a href="#" data-toggle="dropdown" style="color:#777; margin-top: 5px;" class="dropdown-toggle">
-                <span class="glyphicon glyphicon-user">&nbsp</span><%= current_user.name %>&nbsp<b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="#Profile" title="Profile">Profile</a>
-                </li>
-                <li>
-                  <%= link_to "Sign out", signout_path, id: "sign_out" %>
-                </li>
-              </ul>
-            </li>
-          <% else %>
-            <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
-          <% end %>
-        </li>
-      </ul>
+        <ul class="nav navbar-nav pull-right" style="margin-right: 0px; width:50%">
+          <!-- This works well for static text, like a username -->
+          <!-- Add any additional bootstrap header items.  This is a drop-down from an icon -->
+          <li class="dropdown pull-right">
+            <a href="#" data-toggle="dropdown" style="color:#777; margin-top: 5px;" class="dropdown-toggle">
+              <span class="glyphicon glyphicon-user">&nbsp</span>
+              <%= current_user.name %>&nbsp<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#Profile" title="Profile">Profile</a>
+              </li>
+              <li>
+                <%= link_to "Sign out", signout_path, id: "sign_out" %>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
-      <!-- Required bootstrap placeholder for the collapsed menu -->
-      <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+      <div class="row">
 
-    <!-- The Collapsing items            navbar-left or navbar-right -->
-    <div class="collapse navbar-collapse navbar-left">
-      <!--                      pull-right keeps the drop-down in line -->
-      <ul class="nav navbar-nav pull-right">
+        <button type="button" data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle navbar-left">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <!-- The Collapsing items            navbar-left or navbar-right -->
+        <div class="collapse navbar-collapse navbar-left " style="clear:both;">
+          <!--                      pull-right keeps the drop-down in line -->
+          <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#map">Map</a></li>
-            <li><a href="#qr">QR Labels</a></li>
-            <li><a href="#reports">Reports</a></li>
-            <li><a href="#search">Search</a></li>
+            <li><a href="/map">Map</a></li>
+            <li><a href="/qr">QR Labels</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/items">Search</a></li>
             <!--<li><a href="#about">About</a></li>-->
             <!--<li><a href="#contact">Contact</a></li>-->
-      </ul>
-    </div>
-  </div>
-</nav>
+          </ul>
+        </div>
 
-<div class="container">
-  <%= yield %>
-</div>
-  
+      </div>
+    </div>
+  </nav>
+
+  <%= if :notice %>
+  <div class="container" style="color:red;">
+    <%= :notice %>
+  </div>  
+  <% end %>
+
+  <div class="container">
+    <%= yield %>
+  </div>
+
 </body>
 
 </html>

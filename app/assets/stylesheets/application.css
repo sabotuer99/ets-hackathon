@@ -20,3 +20,17 @@ a.bigger, a.bigger:visited {
     margin: 10px;
     color: white;
 }
+
+.even {
+    background-color: #ADD8E6 !important;
+}
+
+.datatable-header tr th{
+    background-color: #008CBA;
+    color: white !important;
+}
+
+.navbar-toggle.navbar-left {
+  float: left;
+  margin-left: 15px;
+}
