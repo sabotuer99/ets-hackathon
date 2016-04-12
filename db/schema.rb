@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160412054055) do
+ActiveRecord::Schema.define(version: 20160412194840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "agencies", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "agency_name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "items", force: :cascade do |t|
@@ -30,9 +30,11 @@ ActiveRecord::Schema.define(version: 20160412054055) do
     t.string   "zip"
     t.string   "loc_lat"
     t.string   "loc_long"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "city"
+    t.string   "assigned_to"
+    t.string   "state_asset_tag"
   end
 
   create_table "states", force: :cascade do |t|

@@ -4,10 +4,18 @@
   <strong>Description:</strong>
   <%= @item.description %>
 </p>
-
+<p>
+  <strong>State Asset Tag#:</strong>
+  <%= @item.state_asset_tag  %>
+</p>
 <p>
   <strong>Agency:</strong>
-  <%= @item.agency_id %>
+  <%= Agency.find(@item.agency_id).agency_name rescue "Unknown" %>
+</p>
+
+<p>
+  <strong>Assigned To:</strong>
+  <%= @item.assigned_to || "Unassigned" %>
 </p>
 
 <p>
@@ -22,7 +30,7 @@
 
 <p>
   <strong>State:</strong>
-  <%= @item.state_id %>
+  <%= State.find(@item.state_id).state_abbr rescue "Unknown" %>
 </p>
 
 <p>

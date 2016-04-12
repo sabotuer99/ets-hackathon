@@ -1,12 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Items</h1>
+<h1>Inventory Items</h1>
 
-<table id="items_table" class="display compact" cellspacing="0" width="100%">
+<table id="items_table" class="display compact" cellspacing="1" width="100%" style="padding:1px">
   <thead>
     <tr>
       <th>Description</th>
       <th>Agency</th>
+      <th>User</th>
       <th>Street</th>
       <th>City</th>
       <th>State</th>
@@ -23,6 +24,7 @@
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </tfoot>
 
@@ -31,7 +33,8 @@
     <% @items.each do |item| %>
       <tr role="row" class="<%= if even then "even" end; even = !even %>">
         <td><%= item.description %></td>
-        <td><%= item.agency_id %></td>
+        <td><%= truncate Agency.find(item.agency_id).agency_name, length: 30, separator: /\w/, omission: "..." rescue "Unknown" %></td>
+        <td><%= item.assigned_to || "Unassigned" %></td>
         <td><%= item.street %></td>
         <td><%= item.city %></td>
         <td><%= State.find(item.state_id).state_abbr rescue "Unknown" %></td>
@@ -47,7 +50,9 @@
 
 <br>
 
-<%= link_to 'New Item', new_item_path %>
+
+<%= link_to '', new_item_path, class: "btn btn-primary glyphicon glyphicon-plus" %>
+
 
     <script>
     

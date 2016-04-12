@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
+#underscore for gmaps
+gem 'underscore-rails'
+
 #generate qr codes
 gem 'rqrcode-with-patches', '~> 0.5.4'
 

@@ -1,2 +1,116 @@
-<h1>Qr#index</h1>
-<p>Find me in app/views/qr/index.html.erb</p>
+<h1>Qr Code Labels</h1>
+
+<style>
+    table {
+      border-width: 0;
+      border-style: none;
+      border-color: #0000ff;
+      border-collapse: collapse;
+    }
+    
+    td {
+      border-left: solid 3px #000;
+      padding: 0; 
+      margin: 0; 
+      width: 0px; 
+      height: 3px; 
+    }
+    
+    td.black { border-color: #000; }
+    td.white { border-color: #fff; }
+    
+    .asset_tag {
+        display: none;
+    }
+    
+    @media print {
+        .print-container{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            z-index: 9999;
+            background-color: #ffffff;
+        }
+        
+        h1 {
+            display: none;
+        }
+        
+        .col-sm-3{
+            display: inline-block;
+            width: 48%;
+            padding: 15px;
+            overflow: hidden;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        
+        .print-group {
+            width: 48%;
+            display: inline-block;
+            border: black solid 1px;
+            margin-right: 10px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+        
+        .qr_desc {
+            height: 125px;
+            vertical-align: top;
+        }
+        
+        .row, .well{
+            border: none;
+            padding: none;
+            margin-top: -20px;
+            margin-bottom: -20px;
+        }
+        
+        p.asset_tag {
+            display: inline;
+        }
+        
+        p.description, p.assigned_to {
+            display: none;
+        }
+
+    }
+    
+</style>
+
+<div class="container-fluid print-container">
+
+
+    <% @codes.each_slice(2) do |slice| %>
+        <div class='row well'>
+            <div class="print-group">
+                <div class="col-sm-3 qr_desc">
+                    <p class="description"><%= slice[0]['item'].description %></p>
+                    <p class="asset_tag"><%= slice[0]['item'].state_asset_tag %></p>
+                    <p class="assigned_to"><%= slice[0]['item'].assigned_to %></p>
+                    <p><%= Agency.find(slice[0]['item'].agency_id).agency_name rescue "Unknown Agency" %></p>
+                </div>
+                <div class="col-sm-3 qr_code">
+                    <%= raw slice[0]['code'].as_html %>
+                </div>
+            </div>
+        <% if(slice.length == 2) then %>
+            <div class="print-group">
+                <div class="col-sm-3 qr_desc">
+                    <p class="description"><%= slice[1]['item'].description %></p>
+                    <p class="asset_tag"><%= slice[1]['item'].state_asset_tag %></p>
+                    <p class="assigned_to"><%= slice[1]['item'].assigned_to %></p>
+                    <p><%= Agency.find(slice[1]['item'].agency_id).agency_name rescue "Unknown Agency" %></p>
+                </div>
+                <div class="col-sm-3 qr_code">
+                    <%= raw slice[1]['code'].as_html %>
+                </div>
+            </div>
+        <% end %>
+        </div>
+    <% end %>
+    
+</div>

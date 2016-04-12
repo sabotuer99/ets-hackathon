@@ -13,37 +13,106 @@
 
   <div class="field">
     <%= f.label :description %><br>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+    <div class="field">
+    <%= f.label :state_asset_tag %><br>
+    <%= f.text_field :state_asset_tag, class: "form-control" %>
   </div>
   <div class="field">
     <%= f.label :agency_id %><br>
-    <%= f.number_field :agency_id %>
+    <%= f.select :agency_id, Agency.all.collect {|x| [x.agency_name, x.id]}, {:include_blank => "Select One"}, class: "form-control" %>
+  </div>
+   <div class="field">
+    <%= f.label :assigned_to %><br>
+    <%= f.text_field :assigned_to, class: "form-control" %>
   </div>
   <div class="field">
     <%= f.label :street %><br>
-    <%= f.text_field :street %>
+    <%= f.text_field :street, class: "form-control" %>
   </div>
   <div class="field">
     <%= f.label :city %><br>
-    <%= f.text_field :city %>
+    <%= f.text_field :city, class: "form-control" %>
   </div>
   <div class="field">
     <%= f.label :state_id %><br>
-    <%= f.select :state_id, State.all.collect {|x| [x.state_abbr, x.id]}, {:include_blank => "Select One"} %>
+    <%= f.select :state_id, State.all.collect {|x| [x.state_abbr, x.id]}, {:include_blank => "Select One"}, class: "form-control" %>
   </div>
   <div class="field">
     <%= f.label :zip %><br>
-    <%= f.text_field :zip %>
+    <%= f.text_field :zip, class: "form-control" %>
   </div>
-  <div class="field">
-    <%= f.label :loc_lat %><br>
-    <%= f.text_field :loc_lat %>
+  
+  <%= f.label "Location" %>
+  <div class="btn btn-xs btn-success" onClick="updateLocation()">
+    <span class="hidden-xs">Update From Current Location</span>
+    <span class="glyphicon glyphicon-map-marker hidden-lg hidden-xl hidden-md hidden-sm "></span>
   </div>
-  <div class="field">
-    <%= f.label :loc_long %><br>
-    <%= f.text_field :loc_long %>
+  <div class="btn btn-xs btn-info" onClick="codeAddress()">
+    <span class="hidden-xs">Update From Address</span>
+    <span class="glyphicon glyphicon-globe hidden-lg hidden-xl hidden-md hidden-sm "></span>
   </div>
+  <div class="well">
+    <div class="field">
+      <%= f.label "Latitude" %><br>
+      <%= f.text_field :loc_lat, class: "form-control"%>
+    </div>
+    <div class="field">
+      <%= f.label "Longitude" %><br>
+      <%= f.text_field :loc_long, class: "form-control"%>
+    </div>
+  </div>
+  
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: "btn btn-primary" %>
   </div>
 <% end %>
+
+<script>
+  function updateLocation(){
+    if (navigator.geolocation) {
+      console.log("Geolocation succeeded");
+        navigator.geolocation.getCurrentPosition(populateFields);
+    } else {
+      console.log("Geolocation failed");
+        alert("Geolocation is not supported by this browser.");
+    }
+  }
+  
+  function populateFields(position) {
+    $('#item_loc_lat').val(position.coords.latitude);
+    $('#item_loc_long').val(position.coords.longitude); 
+  }
+  
+</script>
+<script>
+  var geocoder;
+  function initMap() {
+    geocoder = new google.maps.Geocoder();
+  }
+  
+  function codeAddress() {
+    var address = $("#item_street").val() + ' ' +
+                  $("#item_city").val() + ' ' +
+                  $("#item_state_id :selected").text() + ' ' +
+                  $("#item_zip").val();
+                  
+    console.log(address);              
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        //map.setCenter(results[0].geometry.location);
+        // var marker = new google.maps.Marker({
+        //     map: map,
+        //     position: results[0].geometry.location
+        // });
+        $('#item_loc_lat').val(results[0].geometry.location.lat);
+        $('#item_loc_long').val(results[0].geometry.location.lng); 
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+      
+</script>
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCewGn8rk7jFOj6DDiB1LjI7uYE3vlCTiI&callback=initMap" async defer></script>

@@ -34,3 +34,9 @@ a.bigger, a.bigger:visited {
   float: left;
   margin-left: 15px;
 }
+
+ a:visited.btn,  a.btn,  a:hover.btn{
+    color: white !important;
+    border-radius: 50px;
+    font-size: 1.5em
+}
