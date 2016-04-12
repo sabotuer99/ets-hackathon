@@ -11,9 +11,7 @@
       <th>City</th>
       <th>State</th>
       <th>Zip</th>
-      <th>Loc lat</th>
-      <th>Loc long</th>
-      <th></th>
+      <th style="display:none;" class="sorting_disabled"></th>
     </tr>
   </thead>
   <tfoot>
@@ -25,25 +23,23 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </tfoot>
 
   <tbody>
+    <% even = true; %>
     <% @items.each do |item| %>
-      <tr>
+      <tr role="row" class="<%= if even then "even" end; even = !even %>">
         <td><%= item.description %></td>
         <td><%= item.agency_id %></td>
         <td><%= item.street %></td>
-        <td><%= item.city_id %></td>
-        <td><%= item.state_id %></td>
+        <td><%= item.city %></td>
+        <td><%= State.find(item.state_id).state_abbr rescue "Unknown" %></td>
         <td><%= item.zip %></td>
-        <td><%= item.loc_lat %></td>
-        <td><%= item.loc_long %></td>
-        <td><%= link_to 'Show', item %>
+        <td>
+         <%= link_to 'Details', item %>
          <%= link_to 'Edit', edit_item_path(item) %>
-         <%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+         <%= link_to 'Delete', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -58,12 +54,14 @@
     
     $(document).ready(function() {
     
-      var datatable = $('#items_table').DataTable( {
-        dom: 'Bfrtip',
-        responsive: true,
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-      } );    
+    $('#items_table').DataTable();
+      // var datatable = $('#items_table').DataTable( {
+      //   dom: 'Bfrtip',
+      //   responsive: true,
+      //   buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+      // } );    
       
+      /*
       // Setup - add a text input to each footer cell
       $('#items_table tfoot th').each( function () {
         var title = $(this).text();
@@ -82,7 +80,7 @@
             }
         } );
       } );
-      
+      */
     } );
     
 </script>

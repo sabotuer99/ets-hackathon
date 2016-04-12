@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  resources :states
+  get 'states/index'
+
+  resources :agencies
   resources :items
+  resources :states
 
   get 'reports/index'
   get 'reports' => 'reports#index'

@@ -24,12 +24,12 @@
     <%= f.text_field :street %>
   </div>
   <div class="field">
-    <%= f.label :city_id %><br>
-    <%= f.number_field :city_id %>
+    <%= f.label :city %><br>
+    <%= f.text_field :city %>
   </div>
   <div class="field">
     <%= f.label :state_id %><br>
-    <%= f.number_field :state_id %>
+    <%= f.select :state_id, State.all.collect {|x| [x.state_abbr, x.id]}, {:include_blank => "Select One"} %>
   </div>
   <div class="field">
     <%= f.label :zip %><br>
