@@ -1,6 +1,7 @@
 require 'rqrcode'
 
 class QrController < ApplicationController
+  before_filter :authenticate_user!
   
   def index
     @codes = Item.all.collect do |item|

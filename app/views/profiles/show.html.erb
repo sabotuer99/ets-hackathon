@@ -1,16 +1,32 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Inventory Items</h1>
+<p>
+  <strong>Email:</strong>
+  <%= @profile.email %>
+</p>
+
+<p>
+  <strong>Agency:</strong>
+  <%= Agency.find(@profile.agency_id).agency_name rescue "Unknown" %>
+</p>
+
+<p>
+  <strong>User name:</strong>
+  <%= @profile.user_name %>
+</p>
+
+<%= link_to 'Edit', edit_profile_path(@profile) %> 
+
+
+<h3>My Inventory Items</h3>
 
 <table id="items_table" class="display compact" cellspacing="1" width="100%" style="padding:1px">
   <thead>
     <tr>
       <th>Description</th>
       <th>Agency</th>
-      <th class="hidden-xs">Asset Tag#</th>
-      <th>User</th>
       <th class="hidden-xs">Street</th>
-      <th>City</th>
+      <th class="hidden-xs">City</th>
       <th class="hidden-xs">State</th>
       <th class="hidden-xs">Zip</th>
       <th style="display:none;" class="sorting_disabled"></th>
@@ -21,9 +37,7 @@
       <th></th>
       <th></th>
       <th class="hidden-xs"></th>
-      <th></th>
       <th class="hidden-xs"></th>
-      <th></th>
       <th class="hidden-xs"></th>
       <th class="hidden-xs"></th>
       <th></th>
@@ -36,10 +50,8 @@
       <tr role="row" class="<%= if even then "even" end; even = !even %>">
         <td><%= item.description %></td>
         <td><%= truncate Agency.find(item.agency_id).agency_name, length: 30, separator: /\w/, omission: "..." rescue "Unknown" %></td>
-        <td class="hidden-xs"><%= item.state_asset_tag %></td>
-        <td><%= item.assigned_to || "Unassigned" %></td>
         <td class="hidden-xs"><%= item.street %></td>
-        <td><%= item.city %></td>
+        <td class="hidden-xs"><%= item.city %></td>
         <td class="hidden-xs"><%= State.find(item.state_id).state_abbr rescue "Unknown" %></td>
         <td class="hidden-xs"><%= item.zip %></td>
         <td>
@@ -51,44 +63,8 @@
   </tbody>
 </table>
 
-<br>
-
-
-<%= link_to '', new_item_path, class: "btn btn-primary glyphicon glyphicon-plus circle" %>
-
-
-    <script>
-    
-    
-    $(document).ready(function() {
-    
+<script>
+  $(document).ready(function() {
     $('#items_table').DataTable();
-      // var datatable = $('#items_table').DataTable( {
-      //   dom: 'Bfrtip',
-      //   responsive: true,
-      //   buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
-      // } );    
-      
-      /*
-      // Setup - add a text input to each footer cell
-      $('#items_table tfoot th').each( function () {
-        var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-      } );
-      
-      // Apply the search
-      datatable.columns().every( function () {
-        var that = this;
- 
-        $( 'input', this.footer() ).on( 'keyup change', function () {
-            if ( that.search() !== this.value ) {
-                that
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-      } );
-      */
-    } );
-    
+  } );
 </script>

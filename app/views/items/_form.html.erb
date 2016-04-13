@@ -23,10 +23,19 @@
     <%= f.label :agency_id %><br>
     <%= f.select :agency_id, Agency.all.collect {|x| [x.agency_name, x.id]}, {:include_blank => "Select One"}, class: "form-control" %>
   </div>
-   <div class="field">
-    <%= f.label :assigned_to %><br>
+  <div class="field">
+    <%= f.label "Assigned to (email)" %><br>
     <%= f.text_field :assigned_to, class: "form-control" %>
   </div>
+  <br />
+  
+  <%= f.label "Address" %>
+  <div class="btn btn-xs btn-success" onClick="addressFromHere()">
+    <span class="hidden-xs">Update From Current Location</span>
+    <span class="glyphicon glyphicon-map-marker hidden-lg hidden-xl hidden-md hidden-sm "></span>
+  </div>
+  <div class="well">
+
   <div class="field">
     <%= f.label :street %><br>
     <%= f.text_field :street, class: "form-control" %>
@@ -37,12 +46,14 @@
   </div>
   <div class="field">
     <%= f.label :state_id %><br>
-    <%= f.select :state_id, State.all.collect {|x| [x.state_abbr, x.id]}, {:include_blank => "Select One"}, class: "form-control" %>
+    <%= f.select :state_id, State.all.collect {|x| [x.state_abbr, x.id]}, {:include_blank => "Select One"}, class: "form-control", :selected => 5 %>
   </div>
   <div class="field">
     <%= f.label :zip %><br>
     <%= f.text_field :zip, class: "form-control" %>
   </div>
+  </div>
+  <br />
   
   <%= f.label "Location" %>
   <div class="btn btn-xs btn-success" onClick="updateLocation()">
@@ -85,11 +96,83 @@
     $('#item_loc_long').val(position.coords.longitude); 
   }
   
-</script>
-<script>
   var geocoder;
   function initMap() {
     geocoder = new google.maps.Geocoder();
+  }
+  
+  function addressFromHere(){
+    if (navigator.geolocation) {
+      console.log("Geolocation succeeded");
+        navigator.geolocation.getCurrentPosition(reverseGeocode);
+    } else {
+      console.log("Geolocation failed");
+        alert("Geolocation is not supported by this browser.");
+    }
+  }
+  
+  var nearby;
+  function reverseGeocode(position) {
+    // var address = $("#item_street").val() + ' ' +
+    //               $("#item_city").val() + ' ' +
+    //               $("#item_state_id :selected").text() + ' ' +
+    //               $("#item_zip").val();
+    var latlng = {lat: position.coords.latitude, 
+                  lng: position.coords.longitude};   
+    
+    geocoder.geocode( { 'location': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
+        console.log(results)
+        nearby = parseReverse(results);
+        console.log(nearby);
+        // $('#item_street').val(results[0].address_components.street_address);
+        // $('#item_city').val(results[0].address_components.locality); 
+        // var cityAbbr = results[0].address_components.administrative_area_level_1;
+        // $("#item_state_id option").filter(function() {
+        //     return this.text == cityAbbr; 
+        // }).attr('selected', true);
+        // $("#item_zip").val(results[0].address_components.postal_code);
+      } else {
+        alert("Reverse Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+  
+  function parseReverse(results){
+    
+    var parsed = [];
+    
+    for(var i = 0; i < results.length; i++){
+      var result = {};
+      var comps = results[i].address_components;
+      for(var j = 0; j < comps.length; j++){
+        var types = results[i].address_components[j].types;
+        for(var k = 0; k < types.length; k++){
+          switch(results[i].address_components[j].types[k]){
+            case "street_number":
+              result.street_number = results[i].address_components[j].short_name;
+            break;
+            case "route":
+              result.route = results[i].address_components[j].short_name;
+            break;
+            case "locality":
+              result.city = results[i].address_components[j].short_name;
+            break;
+            case "administrative_area_level_1":
+              result.state = results[i].address_components[j].short_name;
+            break;
+            case "postal_code":
+              result.zip = results[i].address_components[j].short_name;
+            break;
+          }  
+        }
+      }
+      
+      if(result.city && result.state && result.zip)
+        parsed.push(result);
+    }
+    
+    return parsed;
   }
   
   function codeAddress() {
@@ -101,11 +184,6 @@
     console.log(address);              
     geocoder.geocode( { 'address': address}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
-        //map.setCenter(results[0].geometry.location);
-        // var marker = new google.maps.Marker({
-        //     map: map,
-        //     position: results[0].geometry.location
-        // });
         $('#item_loc_lat').val(results[0].geometry.location.lat);
         $('#item_loc_long').val(results[0].geometry.location.lng); 
       } else {

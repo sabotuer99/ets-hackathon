@@ -1,5 +1,6 @@
 class MapController < ApplicationController
   include ActionView::Helpers::UrlHelper
+  before_filter :authenticate_user!
   
   def index
     

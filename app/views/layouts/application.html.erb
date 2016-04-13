@@ -39,18 +39,18 @@
           <a href="/" class="navbar-brand" style="margin-left: 0px;">Inventory Management</a>
         </div>
         
-        <% if current_user then %>
+        <% if current_user && current_user.profile_id then %>
         <ul class="nav navbar-nav pull-right" style="margin-right: 0px; width:50%">
           <!-- This works well for static text, like a username -->
           <!-- Add any additional bootstrap header items.  This is a drop-down from an icon -->
-          <li class="dropdown pull-right">
-            <a href="#" data-toggle="dropdown" style="color:#777; margin-top: 5px;" class="dropdown-toggle">
-              <span class="glyphicon glyphicon-user">&nbsp</span>
-              <%= current_user.name %>&nbsp<b class="caret"></b>
+          <li class="dropdown pull-right" style="vertical-align:middle">
+            <a href="#" data-toggle="dropdown" style="color:#777;" class="dropdown-toggle">
+              <img src="<%= gravitar_url + "&s=15" %>" />
+              <%= current_user.name.split[0] %>&nbsp<b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#Profile" title="Profile">Profile</a>
+                <a href="/profiles/<%= current_user.profile_id %>" title="Profile">Profile</a>
               </li>
               <li>
                 <%= link_to "Sign out", signout_path, id: "sign_out" %>
@@ -74,7 +74,7 @@
         <div class="collapse navbar-collapse navbar-left " style="clear:both;">
           <!--                      pull-right keeps the drop-down in line -->
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="/">Home</a></li>
             <li><a href="/map">Map</a></li>
             <li><a href="/qr">QR Labels</a></li>
             <li><a href="/reports">Reports</a></li>

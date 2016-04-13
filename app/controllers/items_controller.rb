@@ -16,6 +16,8 @@ class ItemsController < ApplicationController
   # GET /items/new
   def new
     @item = Item.new
+    @item.agency_id = Profile.find(current_user.profile_id).agency_id
+    @item.state_id = 57 #Wyoming
   end
 
   # GET /items/1/edit
