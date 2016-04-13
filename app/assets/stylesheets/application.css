@@ -14,8 +14,9 @@
  *= require_self
 
  */
- 
-a.bigger, a.bigger:visited {
+
+a.bigger,
+a.bigger:visited {
     font-size: 3em;
     margin: 10px;
     color: white;
@@ -25,18 +26,23 @@ a.bigger, a.bigger:visited {
     background-color: #ADD8E6 !important;
 }
 
-.datatable-header tr th{
+.datatable-header tr th {
     background-color: #008CBA;
     color: white !important;
 }
 
 .navbar-toggle.navbar-left {
-  float: left;
-  margin-left: 15px;
+    float: left;
+    margin-left: 15px;
 }
 
- a:visited.btn,  a.btn,  a:hover.btn{
+a:visited.btn,
+a.btn,
+a:hover.btn {
     color: white !important;
-    border-radius: 50px;
     font-size: 1.5em
+}
+
+.circle {
+    border-radius: 50px;
 }

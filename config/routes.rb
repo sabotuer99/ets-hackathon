@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
+  get 'login/login'
+
   resources :states
   get 'states/index'
+
+  get 'login', to: 'login#login', as: 'login_page'
 
   resources :agencies
   resources :items

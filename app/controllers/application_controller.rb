@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     if current_user
       #TODO check if profile is created, redirect to profile create page if not
     else
-      redirect_to "/auth/google_oauth2"
+      redirect_to '/login'
     end
   end
   

@@ -1,4 +1,6 @@
 class MapController < ApplicationController
+  include ActionView::Helpers::UrlHelper
+  
   def index
     
     @items = Item.all
@@ -11,7 +13,7 @@ class MapController < ApplicationController
       marker = Marker.new
       marker.lat = item.loc_lat
       marker.lng = item.loc_long
-      marker.infowindow = item.description
+      marker.infowindow = item.description + "<br/>" + (link_to "Details", item_path(item)) #controller: "items", action: "show", id: item.id)
       picture = MarkerPicture.new
       picture.url = "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png"
       picture.width = 32
