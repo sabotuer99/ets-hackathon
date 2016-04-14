@@ -26,16 +26,24 @@ class ApplicationController < ActionController::Base
   
   protected
   def authenticate_user!
+    
     if current_user
-      #TODO check if profile is created, redirect to profile create page if not
       profile_id = Profile.select {|p| p.email == current_user.email}.first.id rescue nil
       if profile_id 
         current_user.profile_id = profile_id
         current_user.profile = Profile.find(profile_id);
+        
+        #if a destination is in the session, clear the value and redirect to it
+        if cookies[:destination]
+          dest = cookies[:destination]
+          cookies.delete :destination
+          redirect_to dest
+        end
       else
         redirect_to new_profile_path + "?email=" + current_user.email + "&user_name=" + current_user.name
       end
     else
+      cookies[:destination] = request.fullpath
       redirect_to '/login'
     end
   end
