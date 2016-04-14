@@ -7,12 +7,12 @@
     <tr>
       <th>Description</th>
       <th>Agency</th>
-      <th class="hidden-xs">Asset Tag#</th>
+      <th >Asset Tag#</th>
       <th>User</th>
-      <th class="hidden-xs">Street</th>
+      <th >Street</th>
       <th>City</th>
-      <th class="hidden-xs">State</th>
-      <th class="hidden-xs">Zip</th>
+      <th >State</th>
+      <th >Zip</th>
       <th style="display:none;" class="sorting_disabled"></th>
     </tr>
   </thead>
@@ -20,12 +20,12 @@
     <tr>
       <th></th>
       <th></th>
-      <th class="hidden-xs"></th>
+      <th ></th>
       <th></th>
-      <th class="hidden-xs"></th>
+      <th ></th>
       <th></th>
-      <th class="hidden-xs"></th>
-      <th class="hidden-xs"></th>
+      <th ></th>
+      <th></th>
       <th></th>
     </tr>
   </tfoot>
@@ -36,12 +36,12 @@
       <tr role="row" class="<%= if even then "even" end; even = !even %>">
         <td><%= item.description %></td>
         <td><%= truncate Agency.find(item.agency_id).agency_name, length: 30, separator: /\w/, omission: "..." rescue "Unknown" %></td>
-        <td class="hidden-xs"><%= item.state_asset_tag %></td>
+        <td ><%= item.state_asset_tag %></td>
         <td><%= item.assigned_to || "Unassigned" %></td>
-        <td class="hidden-xs"><%= item.street %></td>
+        <td ><%= item.street %></td>
         <td><%= item.city %></td>
-        <td class="hidden-xs"><%= State.find(item.state_id).state_abbr rescue "Unknown" %></td>
-        <td class="hidden-xs"><%= item.zip %></td>
+        <td ><%= State.find(item.state_id).state_abbr rescue "Unknown" %></td>
+        <td ><%= item.zip %></td>
         <td>
          <%= link_to 'Details', item %>
          <%= link_to 'Edit', edit_item_path(item) %>
@@ -64,9 +64,18 @@
     
     //$('#items_table').DataTable();
       var datatable = $('#items_table').DataTable( {
-        dom: 'Bfrtip',
+        dom: 'frtipB',
         responsive: true,
-        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+        //buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+        buttons: {
+            buttons: [
+                { extend: 'copy', className: 'btn-xs' },
+                { extend: 'csv', className: 'btn-xs' },
+                { extend: 'excel', className: 'btn-xs' },
+                { extend: 'pdf', className: 'btn-xs' },
+                { extend: 'print', className: 'btn-xs' }
+            ]
+        }
       } );    
       
       /*
