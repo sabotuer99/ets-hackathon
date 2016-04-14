@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'login', to: 'login#login', as: 'login_page'
 
+  get 'items/nearby' => 'items#nearby'
+
   resources :agencies
   resources :items
   resources :states

@@ -63,6 +63,29 @@ class ItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def nearby
+    params.permit(:lat, :lng)
+    lat = params[:lat].to_f
+    lng = params[:lng].to_f
+    
+    items = Item.select {|item| (item.loc_lat.to_f - lat).abs < 0.9 && (item.loc_long.to_f - lng).abs < 0.9 }
+                .group_by {|item| item.street.strip }.values.collect {|arr| arr[0]}
+    
+    items.sort_by! {|item| ((item.loc_lat.to_f - lat)**2 + (item.loc_long.to_f - lng)**2)**0.5}
+    
+    nearby = items.take(5).collect do |item| 
+      address = {}
+      address['street_number'] = item.street
+      address['city'] = item.city
+      address['state'] = State.find(item.state_id).state_abbr rescue "Unknown"
+      address['zip'] = item.zip
+      address
+    end
+
+    render json: nearby
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.

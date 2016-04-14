@@ -31,10 +31,22 @@
   
   <%= f.label "Address" %>
   <div class="btn btn-xs btn-success" onClick="addressFromHere()">
-    <span class="hidden-xs">Update From Current Location</span>
+    <span class="hidden-xs">Search Google Maps</span>
     <span class="glyphicon glyphicon-map-marker hidden-lg hidden-xl hidden-md hidden-sm "></span>
   </div>
+  <div class="btn btn-xs btn-info" onClick="addressFromDatabase()">
+    <span class="hidden-xs">Search Database</span>
+    <span class="glyphicon glyphicon-hdd hidden-lg hidden-xl hidden-md hidden-sm "></span>
+  </div>
+  <div id="addressSpinner" class="btn-md fa fa-spinner fa-spin" style="display:none"></div>
   <div class="well">
+
+  <div id="geolocationPager" style="display:none;">
+    Found: 
+    <span class="glyphicon glyphicon-chevron-left" onclick="prevAddress()"></span>
+    <span id="currentAddressIndex"></span> of <span id="numberNearbyAddresses"></span>
+    <span class="glyphicon glyphicon-chevron-right" onclick="nextAddress()"></span>
+  </div>
 
   <div class="field">
     <%= f.label :street %><br>
@@ -57,13 +69,14 @@
   
   <%= f.label "Location" %>
   <div class="btn btn-xs btn-success" onClick="updateLocation()">
-    <span class="hidden-xs">Update From Current Location</span>
+    <span class="hidden-xs">Update (Current location)</span>
     <span class="glyphicon glyphicon-map-marker hidden-lg hidden-xl hidden-md hidden-sm "></span>
   </div>
   <div class="btn btn-xs btn-info" onClick="codeAddress()">
-    <span class="hidden-xs">Update From Address</span>
-    <span class="glyphicon glyphicon-globe hidden-lg hidden-xl hidden-md hidden-sm "></span>
+    <span class="hidden-xs">Update (Address)</span>
+    <span class="glyphicon glyphicon-road hidden-lg hidden-xl hidden-md hidden-sm "></span>
   </div>
+  <div id="locationSpinner" class="btn-md fa fa-spinner fa-spin" style="display:none"></div>
   <div class="well">
     <div class="field">
       <%= f.label "Latitude" %><br>
@@ -81,9 +94,15 @@
 <% end %>
 
 <script>
+
+  aSpinner = $('#addressSpinner');
+  lSpinner = $('#locationSpinner');
+
   function updateLocation(){
+    
     if (navigator.geolocation) {
       console.log("Geolocation succeeded");
+        lSpinner.show();
         navigator.geolocation.getCurrentPosition(populateFields);
     } else {
       console.log("Geolocation failed");
@@ -92,6 +111,7 @@
   }
   
   function populateFields(position) {
+    lSpinner.hide();
     $('#item_loc_lat').val(position.coords.latitude);
     $('#item_loc_long').val(position.coords.longitude); 
   }
@@ -101,41 +121,103 @@
     geocoder = new google.maps.Geocoder();
   }
   
+  function addressFromDatabase(){
+    if (navigator.geolocation) {
+      aSpinner.show();
+        navigator.geolocation.getCurrentPosition(getNearbyFromDatabase);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+  }
+  
+  function getNearbyFromDatabase(position){
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude; 
+      
+      $.ajax(
+        {
+          url: "/items/nearby?lat=" + lat + "&lng=" + lng, 
+          success: function(result){
+            nearby = result;
+            index = 0;
+            updatePager();
+          },
+          complete: function(){
+            aSpinner.hide();
+          }
+        });
+  }
+  
   function addressFromHere(){
     if (navigator.geolocation) {
-      console.log("Geolocation succeeded");
-        navigator.geolocation.getCurrentPosition(reverseGeocode);
+      aSpinner.show();
+      navigator.geolocation.getCurrentPosition(reverseGeocode);
     } else {
-      console.log("Geolocation failed");
-        alert("Geolocation is not supported by this browser.");
+      alert("Geolocation is not supported by this browser.");
     }
   }
   
   var nearby;
   function reverseGeocode(position) {
-    // var address = $("#item_street").val() + ' ' +
-    //               $("#item_city").val() + ' ' +
-    //               $("#item_state_id :selected").text() + ' ' +
-    //               $("#item_zip").val();
     var latlng = {lat: position.coords.latitude, 
                   lng: position.coords.longitude};   
     
     geocoder.geocode( { 'location': latlng}, function(results, status) {
+      //whether it worked or not, hide spinner
+      aSpinner.hide();
+      
       if (status == google.maps.GeocoderStatus.OK && results.length > 0) {
-        console.log(results)
+        
+        console.log(results);
         nearby = parseReverse(results);
         console.log(nearby);
-        // $('#item_street').val(results[0].address_components.street_address);
-        // $('#item_city').val(results[0].address_components.locality); 
-        // var cityAbbr = results[0].address_components.administrative_area_level_1;
-        // $("#item_state_id option").filter(function() {
-        //     return this.text == cityAbbr; 
-        // }).attr('selected', true);
-        // $("#item_zip").val(results[0].address_components.postal_code);
+        index = 0;
+        updatePager();
+        assignToAddressFields(nearby[0]);
+
       } else {
         alert("Reverse Geocode was not successful for the following reason: " + status);
       }
     });
+  }
+  
+  var index = 0;
+  function prevAddress(){
+    if(index == 0)
+      index = nearby.length - 1;
+    else
+      index -= 1;
+      
+    assignToAddressFields(nearby[index]);
+  }
+  
+  function nextAddress(){
+    index = (index + 1) % nearby.length;
+    assignToAddressFields(nearby[index]);
+  }
+  
+  function assignToAddressFields(location){
+        $('#item_street').val((location.street_number || '') + " " + (location.route || ''));
+        $('#item_city').val(location.city); 
+        var state = location.state;
+        $("#item_state_id option").filter(function() {
+             return this.text == state; 
+        }).attr('selected', true);
+        $("#item_zip").val(location.zip);
+        updatePager();
+  }
+  
+  function updatePager(){
+    var pager = $('#geolocationPager');
+    
+    if(!nearby || nearby.length == 0){
+      pager.hide();
+    } 
+    else {
+      pager.show();
+      $('#currentAddressIndex').text(index + 1);
+      $('#numberNearbyAddresses').text(nearby.length);
+    }
   }
   
   function parseReverse(results){
@@ -176,6 +258,7 @@
   }
   
   function codeAddress() {
+    lSpinner.show();
     var address = $("#item_street").val() + ' ' +
                   $("#item_city").val() + ' ' +
                   $("#item_state_id :selected").text() + ' ' +
@@ -183,6 +266,7 @@
                   
     console.log(address);              
     geocoder.geocode( { 'address': address}, function(results, status) {
+      lSpinner.hide();
       if (status == google.maps.GeocoderStatus.OK) {
         $('#item_loc_lat').val(results[0].geometry.location.lat);
         $('#item_loc_long').val(results[0].geometry.location.lng); 
