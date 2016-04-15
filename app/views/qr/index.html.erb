@@ -102,9 +102,7 @@
                     <p><%= Agency.find(slice[0]['item'].agency_id).agency_name rescue "Unknown Agency" %></p>
                 </div>
                 <div class="col-sm-3 qr_code">
-                    <img src="<%= slice[1]['src'] %>" />
-                    <%= #raw slice[0]['code'].as_html
-                        nil %>
+                    <img src="<%= slice[0]['src'] %>" />
                 </div>
             </div>
         <% if(slice.length == 2) then %>
@@ -117,8 +115,6 @@
                 </div>
                 <div class="col-sm-3 qr_code">
                     <img src="<%= slice[1]['src'] %>" />
-                    <%= #raw slice[1]['code'].as_html
-                        nil  %>
                 </div>
             </div>
         <% end %>
