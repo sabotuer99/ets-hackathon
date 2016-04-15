@@ -84,16 +84,15 @@
         <div class="collapse navbar-collapse navbar-left " style="clear:both;">
           <!--                      pull-right keeps the drop-down in line -->
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="/map">Map</a></li>
-            <li><a href="/qr">QR Labels</a></li>
-            <li><a href="/reports">Reports</a></li>
-            <li><a href="/items">Search</a></li>
+            <li id="homeTab"><a href="/">Home</a></li>
+            <li id="mapTab"><a href="/map">Map</a></li>
+            <li id="qrTab"><a href="/qr">QR Labels</a></li>
+            <li id="reportsTab"><a href="/reports">Reports</a></li>
+            <li id="searchTab"><a href="/items">Search</a></li>
             <!--<li><a href="#about">About</a></li>-->
             <!--<li><a href="#contact">Contact</a></li>-->
           </ul>
         </div>
-
       </div>
     </div>
   </nav>
@@ -109,6 +108,19 @@
   <div class="container">
     <%= yield %>
   </div>
+  <footer class="footer navbar-inverse">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <p>Copyright (c) 2016</p>
+        </div>
+        <div class="col-sm-6">
+          <%= link_to "About", "/about" %><br/>
+          <%= link_to "Contact", "/contact" %>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 </body>
 
