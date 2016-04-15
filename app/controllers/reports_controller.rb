@@ -25,7 +25,7 @@ class ReportsController < ApplicationController
   end  
     
   def userpie
-    rawdata = getUserData
+    rawdata = getUserData.sort! {|x, y| x['sums'][0] <=> y['sums'][0]}
     @agg = [['Users', 'Total Cost']]
     rawdata.each do |data|
       @agg.push [data['id'],data['sums'][0]]

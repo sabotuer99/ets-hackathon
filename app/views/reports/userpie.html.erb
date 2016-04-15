@@ -2,10 +2,11 @@
     $('#reportsTab').addClass("active");
 </script>
 
-<h1>Reports: User Pie Chart</h1>
+<h1>Reports: User Charts</h1>
 
 
-<div id="piechart" style="width: 900px; height: 500px;"></div>
+<div id="piechart" style="width: 900px; height: 700px;"></div>
+<div id="barchart" style="width: 900px; height: 800px;"></div>
 
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -25,5 +26,24 @@
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
 
         chart.draw(data, options);
+        
+        
+        var baroptions = {
+        title: 'Total Equipment Value',
+        chartArea: {width: '50%'},
+        hAxis: {
+          title: 'Total Equipment Value',
+          minValue: 0
+        },
+        vAxis: {
+          title: 'User'
+        }
+      };
+
+      var barchart = new google.visualization.BarChart(document.getElementById('barchart'));
+
+      barchart.draw(data, baroptions);
+        
+        
       }
     </script>
