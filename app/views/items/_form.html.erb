@@ -24,6 +24,17 @@
     <%= f.select :agency_id, Agency.all.collect {|x| [x.agency_name, x.id]}, {:include_blank => "Select One"}, class: "form-control" %>
   </div>
   <div class="field">
+    <%= f.label :date_acquired %><br>
+    <%= f.date_field :date_acquired, class: "form-control" %>
+  </div>
+  <div class="field">
+    <%= f.label :orig_cost %><br>
+    <%= f.text_field :orig_cost, class: "form-control" %>
+  </div>
+  
+  
+  
+  <div class="field">
     <%= f.label "Assigned to (email)" %>
     <div class="btn btn-xs btn-info" onclick="assignMe()"><span>Me</span></div>
     <%= f.text_field :assigned_to, class: "form-control" %>
