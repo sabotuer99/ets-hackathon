@@ -1,0 +1,76 @@
+<script>
+    $('#reportsTab').addClass("active");
+</script>
+
+<h1>Reports: Aggregate by Agency</h1>
+
+<table id="items_table" class="display compact" cellspacing="1" width="100%" style="padding:1px">
+  <thead>
+    <tr>
+      <th>Agency</th>
+      <th>Sum</th>
+      <th>Avg Cost</th>
+      <th>Avg Age</th>
+      <th>Oldest Age</th>
+      <th>Highest Cost</th>
+      <th>Lowest Cost</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </tfoot>
+
+  <tbody>
+    <% even = true; %>
+    <% @agg.each do |item| %>
+      <tr role="row" class="<%= if even then "even" end; even = !even %>">
+        <td><%= truncate Agency.find(item['id']).agency_name, length: 30, separator: /\w/, omission: "..." rescue "Unknown" %></td>
+        <td ><%= item['sums'][0].round(2) %></td>
+        <td><%= item['avg_cost'].round(2) %></td>
+        <td ><%= item['avg_age'].round(2) %></td>
+        <td><%= item['oldest'] %></td>
+        <td ><%= item['highest_cost'] %></td>
+        <td ><%= item['lowest_cost'] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to "Back", '/reports' %>
+
+
+    <script>
+    
+    
+    $(document).ready(function() {
+    
+      var datatable = $('#items_table').DataTable( {
+        dom: 'frtipB',
+        responsive: true,
+        buttons: {
+            buttons: [
+                { extend: 'copy', className: 'btn-xs' },
+                { extend: 'csv', className: 'btn-xs' },
+                { extend: 'excel', className: 'btn-xs' },
+                { extend: 'pdf', className: 'btn-xs' },
+                { extend: 'print', className: 'btn-xs' }
+            ]
+        }
+      } );    
+    } );
+    
+</script>
+
+
+
+

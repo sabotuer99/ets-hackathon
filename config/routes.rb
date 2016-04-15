@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   get 'reports/index'
   get 'reports' => 'reports#index'
+  get 'reports/agency' => 'reports#agency'
+  get 'reports/user' => 'reports#user'
+  get 'reports/userpie' => 'reports#userpie'
 
   get 'qr/index'
   get 'qr' => 'qr#index'
